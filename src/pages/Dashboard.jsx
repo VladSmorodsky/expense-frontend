@@ -1,5 +1,9 @@
+import Layout from "../components/Layout";
+
 export function Dashboard() {
   return (
-    <div>Home</div>
+    <Layout>
+      <div>Dashboard</div>
+    </Layout>
   );
 }
