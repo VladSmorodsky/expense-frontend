@@ -1,10 +1,10 @@
 import {useState} from "react";
-import {login} from "../api/auth";
-import {useLocalStorage} from "../hooks/useLocalStorage";
+import {login as loginUser} from "../api/auth";
 import {useNavigate} from "react-router";
+import {useAuth} from "../context/AuthContext";
 
 export function Login() {
-  const [value, setValue] = useLocalStorage('token');
+  const {addUser} = useAuth();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
@@ -12,8 +12,14 @@ export function Login() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const {data} = await login(username, password);
-      setValue(data.access_token);
+      const {data} = await loginUser(username, password);
+      const user = {
+        id: data.user.id,
+        email: data.user.email,
+        name: data.user.name,
+        token: data.access_token
+      };
+      addUser(user);
       navigate('/');
     } catch (error) {
       console.log('[error]', error);
